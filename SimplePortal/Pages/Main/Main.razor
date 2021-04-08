@@ -1,0 +1,242 @@
+﻿@page "/"
+@inject NavigationManager UriHelper
+@inherits OwningComponentBase<ProjectServices>
+@using Syncfusion.Blazor.Inputs
+
+@if (glist == null || plist == null || ulist == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="centerpanel">
+        <!--кнопки вкладок ігри/програми-->
+        <div class="centerpanelbtn">
+            <button class="btnchange" @onclick=@Games>Games</button>
+            <button class="btnchange" @onclick=@Programs>Programs</button>
+        </div>
+        <div class="centerpanelbtn">
+            Search:
+            <input type="text" placeholder="Search" @bind-value="@searchvalue" />
+        </div>
+        <div class="filter">
+            <!--фільтр ігр-->
+            @if (games == true)
+            {
+                <h3>Ціна</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="text">
+                        <SfSlider Width="(auto)" Value="@PriceValue" Type="SliderType.Range" Min="0" Max="99999" Step="1">
+                            <SliderTooltipData IsVisible="true"
+                                               ShowOn="TooltipShowOn.Always"
+                                               Placement="TooltipPlacement.After">
+                            </SliderTooltipData>
+                        </SfSlider>
+                    </div>
+                </div>
+                <h3>Жанри</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="checkbox" id="genes1">
+                        <label for="genes1">Arcade</label><br />
+                        <input type="checkbox" id="genes2">
+                        <label for="genes2">Action</label><br />
+                        <input type="checkbox" id="genes3">
+                        <label for="genes3">Fighting</label><br />
+                        <input type="checkbox" id="genes4">
+                        <label for="genes4">Race</label><br />
+                        <input type="checkbox" id="genes5">
+                        <label for="genes5">Puzzle</label><br />
+                        <input type="checkbox" id="genes6">
+                        <label for="genes6">Strategies</label>
+                    </div>
+                    <div class="moder">
+                        <input type="checkbox" id="genes7">
+                        <label for="genes7">Horror</label><br />
+                        <input type="checkbox" id="genes8">
+                        <label for="genes8">Adventures</label><br />
+                        <input type="checkbox" id="genes9">
+                        <label for="genes9">RPG</label><br />
+                        <input type="checkbox" id="genes10">
+                        <label for="genes10">Sports</label><br />
+                        <input type="checkbox" id="genes11">
+                        <label for="genes11">Simulator</label><br />
+                        <input type="checkbox" id="genes12">
+                        <label for="genes12">Tabletop</label>
+                    </div>
+                </div>
+                <h3>Роки</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="text">
+                        <SfSlider Width="(auto)" Value="@YearValue" Type="SliderType.Range" Min="2000" Max="2021" Step="1">
+                            <SliderTooltipData IsVisible="true"
+                                               ShowOn="TooltipShowOn.Always"
+                                               Placement="TooltipPlacement.After">
+                            </SliderTooltipData>
+                        </SfSlider>
+                    </div>
+                </div>
+                <h3>Режим гри</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="checkbox" id="mode1">
+                        <label for="mode1">Однокористувацька гра</label><br />
+                        <input type="checkbox" id="mode2">
+                        <label for="mode2">Багатокористувацька гра</label><br />
+                        <input type="checkbox" id="mode3">
+                        <label for="mode3">Кооперативна гра</label><br />
+                        <input type="checkbox" id="mode4">
+                        <label for="mode4">Кросплатформена гра</label><br />
+                    </div>
+                </div>
+                <h3>Операційна система</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="checkbox" id="os1">
+                        <label for="os1">Windows</label><br />
+                        <input type="checkbox" id="os2">
+                        <label for="os2">Linux</label><br />
+                        <input type="checkbox" id="os3">
+                        <label for="os3">Mac</label><br />
+                    </div>
+                </div>
+            }
+            else if (programs == true)
+            {
+                <h3>Ціна</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="text">
+                        <SfSlider Width="(auto)" Value="@PriceValue" Type="SliderType.Range" Min="0" Max="99999" Step="1">
+                            <SliderTooltipData IsVisible="true"
+                                               ShowOn="TooltipShowOn.Always"
+                                               Placement="TooltipPlacement.After">
+                            </SliderTooltipData>
+                        </SfSlider>
+                    </div>
+                </div>
+                <h3>Роки</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="text">
+                        <SfSlider Width="(auto)" Value="@YearValue" Type="SliderType.Range" Min="2000" Max="2021" Step="1">
+                            <SliderTooltipData IsVisible="true"
+                                               ShowOn="TooltipShowOn.Always"
+                                               Placement="TooltipPlacement.After">
+                            </SliderTooltipData>
+                        </SfSlider>
+                    </div>
+                </div>
+                <h3>Операційна система</h3>
+                <div class="mode">
+                    <div class="model">
+                        <input type="checkbox" id="os1">
+                        <label for="os1">Windows</label><br />
+                        <input type="checkbox" id="os2">
+                        <label for="os2">Linux</label><br />
+                        <input type="checkbox" id="os3">
+                        <label for="os3">Mac</label><br />
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="cargo">
+            @if (games == true)
+            {
+                @foreach (var game in glist)
+                {
+                    idpage = game.Id;
+                    <button class="card" @onclick="@GamesPage">
+                        <div>@game.Id</div>
+                        <h3>@game.NameG</h3>
+                        <div>@game.About</div>
+                        <footer>@game.Price</footer>
+                    </button>
+                }
+            }
+            else if (programs == true)
+            {
+                @foreach (var program in plist)
+                {
+                    idpage = program.Id;
+                    <button class="card" @onclick="@ProgramsPage">
+                        <h3>@program.NameP</h3>
+                        <div>@program.About</div>
+                        <footer>@program.Price</footer>
+                    </button>
+                }
+            }
+        </div>
+    </div>
+    <footer class="bottombar">
+        <div class="footerBlock">
+            <div class="footerContacts">
+                <p class="custom-h4">Контакти</p>
+                <a href="tel:0800210904">life.skull.game@gmail.com</a>
+                <div class="timeTableCallCenter">
+                    <p>з 8:00 до 21:00 (без вихідних)</p>
+                </div>
+            </div>
+            <div class="footerMenus">
+                <div class="info">
+                    <p class="custom-h4">Інформація</p>
+                    <menu>
+                        <li>
+                            <a href="/uk/about/">Про нас</a>
+                        </li>
+                        <li>
+                            <a href="/uk/about/contacts/">Контакти</a>
+                        </li>
+                        <li>
+                            <a href="/uk/about/faq/">Допомога / FAQ</a>
+                        </li>
+                        <li>
+                            <a href="/uk/about/usloviya/">Умови використання сайту</a>
+                        </li>
+                    </menu>
+                </div>
+            </div>
+        </div>
+    </footer>
+}
+
+@code
+    {
+    private bool games = true;
+    private bool programs = false;
+    private int[] PriceValue = { 0, 99999 };
+    private int[] YearValue = { 2000, 2021 };
+    private string searchvalue;
+    [Parameter]
+    public int idpage { get; set; }
+    IList<Programs> plist;
+    IList<Games> glist;
+    IList<Users> ulist;
+    protected override void OnInitialized()
+    {
+        plist = Service.GetAllPrograms();
+        glist = Service.GetAllGames();
+        ulist = Service.GetAllUsers();
+    }
+    private void Games()
+    {
+        games = true;
+        programs = false;
+    }
+    private void Programs()
+    {
+        programs = true;
+        games = false;
+    }
+    private void GamesPage()
+    {
+        UriHelper.NavigateTo("/game/" + idpage);
+    }
+    private void ProgramsPage()
+    {
+        UriHelper.NavigateTo("/program/" + idpage);
+    }
+    public static implicit operator int(Main id) => id.idpage;
+}

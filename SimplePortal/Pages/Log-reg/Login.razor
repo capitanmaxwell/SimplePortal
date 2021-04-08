@@ -1,0 +1,90 @@
+﻿@page "/login"
+@inject NavigationManager UriHelper
+
+<link type="text/css" href="/css/login-reg/login-reg.css" rel="stylesheet" />
+
+@*@if (Reguser == null)
+    {
+        <p><em>Loading...</em></p>
+    }*@
+<div class="form">
+    <div class="First">
+        <p class="toptext">Sign to start your session</p>
+        <div class="block1">
+            <input type="text" placeholder="Login" @bind-value="@userlogin" /><br /><br />
+            <input type="password" placeholder="Password" @bind-value="@userpassword" /><br /><br />
+        </div>
+        <div class="block1">
+            <input type="button" value="Registration" class="Enter" @onclick="Singup" />
+            <input type="button" value="Sign in" class="Enter" @onclick="SearchUser" />
+            <br />
+            <input type="button" value="Back" class="Enter" @onclick="Back" />
+        </div>
+    </div>
+    <div class="block1">@enter</div>
+</div>
+@code {
+    //Variables
+    public string userlogin;
+    public string userpassword;
+    public string enter = "";
+    public bool authorization = false;
+    IList<Users> ulist;
+    /*protected override async Task OnInitializedAsync()
+    {
+        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        await GetTodoItems();
+    }*/
+
+
+    //private async Task GetTodoItems() => todoItems = await Http.GetFromJsonAsync<TodoItem[]>(ServiceEndpoint);
+    /*private async Task GetTodoItems()
+    {
+        try
+        {
+            Reguser = await Http.GetFromJsonAsync<RegisterModel[]>("getdb");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }*/
+    //function
+    private void Back()
+    {
+        UriHelper.NavigateTo("/");
+    }
+    private void Singup()
+    {
+        //Registration page
+        UriHelper.NavigateTo("/registration");
+    }
+    private void SearchUser()
+    {
+        foreach (var users in ulist)
+        {
+            if (userlogin == users.Login)
+            {
+                if (userpassword == users.Password)
+                {
+                    authorization = true;
+                    break;
+                }
+            }
+            else authorization = false;
+        }
+
+        if (authorization == true)
+        {
+            //you enter
+            UriHelper.NavigateTo("/");
+
+        }
+        else if (authorization == false)
+        {
+            //login or password uncorenct
+            enter = "Неправильний логін чи пароль.";
+        }
+    }
+}

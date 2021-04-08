@@ -1,0 +1,68 @@
+﻿@page "/program/{idpage:int}"
+@inject NavigationManager UriHelper
+@inherits OwningComponentBase<ProjectServices>
+@using Syncfusion.Blazor.Inputs
+@inject Main.Main id
+
+@if (plist == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="centerpanel">
+        @foreach (var program in plist)
+        {
+            if (id.idpage == program.Id)
+            {
+                idpage = id.idpage;
+                <h1>@program.NameP</h1>
+                <tr>@program.DateRelease</tr>
+                <tr>@program.CreatorName</tr>
+                <tr>@program.About</tr>
+                <tr>@program.Price</tr>
+            }
+        }
+    </div>
+    <footer class="bottombar">
+        <div class="footerBlock">
+            <div class="footerContacts">
+                <p class="custom-h4">Контакти</p>
+                <a href="tel:0800210904">life.skull.game@gmail.com</a>
+                <div class="timeTableCallCenter">
+                    <p>з 8:00 до 21:00 (без вихідних)</p>
+                </div>
+            </div>
+            <div class="footerMenus">
+                <div class="info">
+                    <p class="custom-h4">Інформація</p>
+                    <menu>
+                        <li>
+                            <a href="/uk/about/">Про нас</a>
+                        </li>
+                        <li>
+                            <a href="/uk/about/contacts/">Контакти</a>
+                        </li>
+                        <li>
+                            <a href="/uk/about/faq/">Допомога / FAQ</a>
+                        </li>
+                        <li>
+                            <a href="/uk/about/usloviya/">Умови використання сайту</a>
+                        </li>
+                    </menu>
+                </div>
+            </div>
+        </div>
+    </footer>
+}
+
+@code
+    {
+    [Parameter]
+    public int idpage { get; set; }
+    IList<Programs> plist;
+    protected override void OnInitialized()
+    {
+        plist = Service.GetAllPrograms();
+    }
+}

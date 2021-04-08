@@ -1,0 +1,106 @@
+﻿@inject NavigationManager UriHelper
+@inherits LayoutComponentBase
+<!--
+<div class="sidebar">
+    <NavMenu />
+</div>
+-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="main">
+
+    <div class="top-row px-4">
+
+        <!-- left -->
+        <section class="leftpos">
+            <button class="btn" @onclick="@Home"><i class="fa fa-home"></i>Home</button>
+            <div class="basket">
+                <i class="fas fa-users"></i>Contacts
+                <section class="basketlock">
+                    <div>123213123</div>
+                    <button class="btn">Clear basket</button>
+                    <button class="btn">Go to checklist</button>
+                </section>
+            </div>
+            <button class="btn" @onclick="@Rules"><i class="fas fa-clipboard-list"></i>Terms of use of the site</button>
+        </section>
+        <!-- right -->
+        @if (userin==true)
+        {
+        <section class="rightpos">
+            <button class="btn"><i class="fas fa-shopping-basket"></i>Trash</button>
+            <button class="dropdown">
+                <i class="fas fa-user"></i>Profile
+                <ul class="btnblock">
+                    <button class="btn" @onclick="@Profile">Profile</button>
+                    <button class="btn" @onclick="@Library">Library</button>
+                    <button class="btn" @onclick="@Mygames">Show my games</button>
+                    <button class="btn" @onclick="@Myprograms">Show my programs</button>
+                </ul>
+            </button>
+            <button class="btn" @onclick="@Logout"><i class="fas fa-sign-out-alt"></i>Log out</button>
+        </section>
+        }
+        else
+        {
+            <section>
+                <button class="btn" @onclick="@Singin"><i class="fas fa-sign-in-alt"></i>Sing in</button>
+                <button class="btn" @onclick="@Registr"><i class="fas fa-user-plus"></i>Registration</button>
+            </section>
+        }
+    </div>
+
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+@code {
+    public bool userin = false;
+    private void Home()
+    {
+        //Main page
+        UriHelper.NavigateTo("/");
+    }
+    private void Contacts()
+    {
+        //Contacts page
+        UriHelper.NavigateTo("/contacts");
+    }
+    private void Rules()
+    {
+        //Terms of use of the site
+        UriHelper.NavigateTo("/terms");
+    }
+    private void Logout()
+    {
+        //method exit login
+    }
+    private void Singin()
+    {
+        //Login page
+        UriHelper.NavigateTo("/login");
+    }
+    private void Registr()
+    {
+        //Registration page
+        UriHelper.NavigateTo("/registration");
+    }
+    private void Profile()
+    {
+        UriHelper.NavigateTo("/profile");
+    }
+    private void Library()
+    {
+        UriHelper.NavigateTo("/profile/library");
+    }
+    private void Mygames()
+    {
+        UriHelper.NavigateTo("/profile/mygames");
+    }
+    private void Myprograms()
+    {
+        UriHelper.NavigateTo("/profile/myprograms");
+    }
+}
