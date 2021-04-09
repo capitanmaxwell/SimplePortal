@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace SimplePortal.Data
 {
@@ -19,6 +20,6 @@ namespace SimplePortal.Data
         public string OS { get; set; }
         public string Genre { get; set; }
         public int Price { get; set; }
-        public int Creator_id { get; set; }
-    }
+        public int Creator_id { get; set; }       
+    }   
 }

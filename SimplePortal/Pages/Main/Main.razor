@@ -1,7 +1,8 @@
 ﻿@page "/"
 @inject NavigationManager UriHelper
+@inject SimplePortal.Data.GlobalVariable gvar
 @inherits OwningComponentBase<ProjectServices>
-@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Inputs 
 
 @if (glist == null || plist == null || ulist == null)
 {
@@ -147,9 +148,7 @@ else
             {
                 @foreach (var game in glist)
                 {
-                    idpage = game.Id;
-                    <button class="card" @onclick="@GamesPage">
-                        <div>@game.Id</div>
+                    <button class="card" @onclick="(() => GamesPage(game))">
                         <h3>@game.NameG</h3>
                         <div>@game.About</div>
                         <footer>@game.Price</footer>
@@ -160,8 +159,7 @@ else
             {
                 @foreach (var program in plist)
                 {
-                    idpage = program.Id;
-                    <button class="card" @onclick="@ProgramsPage">
+                    <button class="card" @onclick="(()=>ProgramsPage(program))">
                         <h3>@program.NameP</h3>
                         <div>@program.About</div>
                         <footer>@program.Price</footer>
@@ -169,6 +167,88 @@ else
                 }
             }
         </div>
+        @if (gpage)
+        {
+            <div class="modals" tabindex="-1" style="display:block;">
+                <div class="modals-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title">@(game.NameG = gobj.NameG)</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div class="right-column">
+                                <div>About: <br />@gobj.About</div>
+                                <tr>Date release: @gobj.DateRelease</tr>
+                                <tr>Creator: @gobj.CreatorName</tr>
+                                <tr>Genre: @gobj.Genre</tr>
+                                <tr>Mode: @gobj.Mode</tr>
+                                <tr>OS: @gobj.OS</tr>
+                                @if (gobj.Price == 0)
+                                {
+                                    <h2 style="align-items:flex-end">Price: Free</h2>
+                                }
+                                else
+                                {
+                                    <h2 style="align-items:flex-end">Price: @(game.Price = gobj.Price)$</h2>
+                                }
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @if (gobj.Price != 0)
+                            {
+                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
+                                <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@gobj.Id'">Buy</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Add to library</button>
+                            }
+                            <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (ppage)
+        {
+            <div class="modals" tabindex="-1" style="display:block;">
+                <div class="modals-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title">@pobj.NameP</h2>
+                        </div>
+                        <div class="modal-body">
+                            <div class="right-column">
+                                <div>About: <br />@pobj.About</div>
+                                <tr>Date release: @pobj.DateRelease</tr>
+                                <tr>Creator: @pobj.CreatorName</tr>
+                                <tr>OS: @pobj.OS</tr>
+                                @if (pobj.Price == 0)
+                                {
+                                    <h2 style="align-items:flex-end">Price: Free</h2>
+                                }
+                                else
+                                {
+                                    <h2 style="align-items:flex-end">Price: @pobj.Price$</h2>
+                                }
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            @if (pobj.Price != 0)
+                            {
+                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
+                                <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@pobj.Id'">Buy</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Add to library</button>
+                            }
+                            <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
     <footer class="bottombar">
         <div class="footerBlock">
@@ -209,17 +289,24 @@ else
     private int[] PriceValue = { 0, 99999 };
     private int[] YearValue = { 2000, 2021 };
     private string searchvalue;
-    [Parameter]
-    public int idpage { get; set; }
     IList<Programs> plist;
     IList<Games> glist;
     IList<Users> ulist;
+    Games gobj = new Games();
+    Programs pobj = new Programs();
+    public bool gpage = false;
+    public bool ppage = false;
+    string key = "cartlist";
+    Games game = new Games();
+    List<Cart> cart = new List<Cart>();
     protected override void OnInitialized()
     {
         plist = Service.GetAllPrograms();
         glist = Service.GetAllGames();
         ulist = Service.GetAllUsers();
     }
+
+    #region pages
     private void Games()
     {
         games = true;
@@ -230,13 +317,34 @@ else
         programs = true;
         games = false;
     }
-    private void GamesPage()
+    private void GamesPage(Games gedit)
     {
-        UriHelper.NavigateTo("/game/" + idpage);
+        gobj = gedit;
+        gpage = true;
     }
-    private void ProgramsPage()
+    private void ClosePage()
     {
-        UriHelper.NavigateTo("/program/" + idpage);
+        gpage = false;
+        ppage = false;
     }
-    public static implicit operator int(Main id) => id.idpage;
+    private void ProgramsPage(Programs pedit)
+    {
+        pobj = pedit;
+        ppage = true;
+    }
+    #endregion
+    #region cart
+    public void AddToCart()
+    {
+        var cartgame = new Cart();
+        cartgame.Name = game.NameG;
+        cartgame.TotalPrice =+ game.Price;
+        cart.Add(cartgame);
+        SaveCart();
+    }
+    public void SaveCart()
+    {
+        iLocalStorage.SetItemAsync(key, JsonConvert.SerializeObject(cart));
+    }
+    #endregion
 }

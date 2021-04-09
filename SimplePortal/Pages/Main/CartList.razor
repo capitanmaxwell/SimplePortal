@@ -1,0 +1,79 @@
+﻿@page "/cart"
+@inject SimplePortal.Data.GlobalVariable gvar
+
+<div class="centerpanel">
+    <br />
+    <h3>Your Cart:</h3>
+    <h4>Total: </h4>
+    <table>
+        @{ int total = 0; }
+        @for (int i = 0; i < cart.Count; i++)
+        {            
+            var id = i;
+            var cartid = cart[id];
+        <tr>
+            <td><div>@cartid.Name</div></td>
+                     <td><div>@cartid.TotalPrice</div></td>
+            total += cartid.TotalPrice;
+                              <td><button @onclick="@(()=>RemoveItem(id))">Remove</button></td>
+        </tr>
+        }
+    </table>
+    <br />
+    <h4>Total: @total$</h4>
+</div>
+<footer class="bottombar">
+    <div class="footerBlock">
+        <div class="footerContacts">
+            <p class="custom-h4">Контакти</p>
+            <a href="tel:0800210904">life.skull.game@gmail.com</a>
+            <div class="timeTableCallCenter">
+                <p>з 8:00 до 21:00 (без вихідних)</p>
+            </div>
+        </div>
+        <div class="footerMenus">
+            <div class="info">
+                <p class="custom-h4">Інформація</p>
+                <menu>
+                    <li>
+                        <a href="/uk/about/">Про нас</a>
+                    </li>
+                    <li>
+                        <a href="/uk/about/contacts/">Контакти</a>
+                    </li>
+                    <li>
+                        <a href="/uk/about/faq/">Допомога / FAQ</a>
+                    </li>
+                    <li>
+                        <a href="/uk/about/usloviya/">Умови використання сайту</a>
+                    </li>
+                </menu>
+            </div>
+        </div>
+    </div>
+</footer>
+
+@code {
+    Cart c = new Cart();
+    List<Cart> cart = new List<Cart>();
+    protected override async Task OnInitializedAsync()
+    {
+        var storedcart = await iLocalStorage.GetItemAsync<string>("cartlist");
+        var parsedcart = JsonConvert.DeserializeObject<List<Cart>>(storedcart);
+        cart = parsedcart;
+        if (cart == null)
+        {
+            cart = new List<Cart>();
+        }
+    }
+    private void RemoveItem(int index)
+    {
+        cart.RemoveAt(index);
+        SaveCart();
+    }
+    private void SaveCart()
+    {
+        iLocalStorage.SetItemAsync("cartlist", JsonConvert.SerializeObject(cart));
+    }
+}
+

@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager UriHelper
 @inherits LayoutComponentBase
+@inject SimplePortal.Data.GlobalVariable gvar
 <!--
 <div class="sidebar">
     <NavMenu />
@@ -14,32 +15,24 @@
         <!-- left -->
         <section class="leftpos">
             <button class="btn" @onclick="@Home"><i class="fa fa-home"></i>Home</button>
-            <div class="basket">
-                <i class="fas fa-users"></i>Contacts
-                <section class="basketlock">
-                    <div>123213123</div>
-                    <button class="btn">Clear basket</button>
-                    <button class="btn">Go to checklist</button>
-                </section>
-            </div>
+            <button class="btn" @onclick="@Cart"><i class="oi oi-cart"></i>Cart</button>
             <button class="btn" @onclick="@Rules"><i class="fas fa-clipboard-list"></i>Terms of use of the site</button>
         </section>
         <!-- right -->
-        @if (userin==true)
+        @if (u != null)
         {
-        <section class="rightpos">
-            <button class="btn"><i class="fas fa-shopping-basket"></i>Trash</button>
-            <button class="dropdown">
-                <i class="fas fa-user"></i>Profile
-                <ul class="btnblock">
-                    <button class="btn" @onclick="@Profile">Profile</button>
-                    <button class="btn" @onclick="@Library">Library</button>
-                    <button class="btn" @onclick="@Mygames">Show my games</button>
-                    <button class="btn" @onclick="@Myprograms">Show my programs</button>
-                </ul>
-            </button>
-            <button class="btn" @onclick="@Logout"><i class="fas fa-sign-out-alt"></i>Log out</button>
-        </section>
+            <section class="rightpos">
+                <button class="dropdown">
+                    <i class="fas fa-user"></i>Profile
+                    <ul class="btnblock">
+                        <button class="btn" @onclick="@Profile">Profile</button>
+                        <button class="btn" @onclick="@Library">Library</button>
+                        <button class="btn" @onclick="@Mygames">Show my games</button>
+                        <button class="btn" @onclick="@Myprograms">Show my programs</button>
+                    </ul>
+                </button>
+                <button class="btn" @onclick="@Logout"><i class="fas fa-sign-out-alt"></i>Log out</button>
+            </section>
         }
         else
         {
@@ -58,10 +51,20 @@
 
 @code {
     public bool userin = false;
+    Users u = new Users();
+    protected override async Task OnInitializedAsync()
+    {
+        u = await iLocalStorage.GetItemAsync<Users>("user");
+    }
     private void Home()
     {
         //Main page
         UriHelper.NavigateTo("/");
+    }
+    private void Cart()
+    {
+        //Main page
+        UriHelper.NavigateTo("/cart");
     }
     private void Contacts()
     {
@@ -73,9 +76,11 @@
         //Terms of use of the site
         UriHelper.NavigateTo("/terms");
     }
-    private void Logout()
+    private async void Logout()
     {
         //method exit login
+        u = null;
+        await iLocalStorage.ClearAsync();
     }
     private void Singin()
     {

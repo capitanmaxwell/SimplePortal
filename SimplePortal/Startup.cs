@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http;
 using SimplePortal.Data;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimplePortal.Services;
 using Syncfusion.Blazor;
-
+using Blazored.LocalStorage;
 
 namespace SimplePortal
 {
@@ -37,6 +39,12 @@ namespace SimplePortal
             services.AddOptions();
             services.AddLocalization();
             services.AddSyncfusionBlazor();
+            services.AddScoped<GlobalVariable>();
+            services.AddBlazoredLocalStorage();
+            services.Configure<RouteOptions>(option =>
+            {
+            }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

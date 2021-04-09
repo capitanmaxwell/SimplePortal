@@ -1,9 +1,8 @@
-﻿@page "/game/{idpage}"
-@page "/game"
+﻿@page "/game/{PageID:int}"
 @inject NavigationManager UriHelper
 @inherits OwningComponentBase<ProjectServices>
 @using Syncfusion.Blazor.Inputs
-@inject Main.Main id
+@inject SimplePortal.Data.GlobalVariable gvar
 
 @if (glist == null)
 {
@@ -12,60 +11,24 @@
 else
 {
     <div class="centerpanel">
-        @foreach (var game in glist)
-        {
-            if (id.idpage == game.Id)
-            {
-                idpage = id.ToString();
-                <h1>@game.NameG</h1>
-                <tr>@game.DateRelease</tr>
-                <tr>@game.CreatorName</tr>
-                <tr>@game.Genre</tr>
-                <tr>@game.Mode</tr>
-                <tr>@game.About</tr>
-                <tr>@game.Price</tr>
-            }
-        }
-    </div>
-    <footer class="bottombar">
-        <div class="footerBlock">
-            <div class="footerContacts">
-                <p class="custom-h4">Контакти</p>
-                <a href="tel:0800210904">life.skull.game@gmail.com</a>
-                <div class="timeTableCallCenter">
-                    <p>з 8:00 до 21:00 (без вихідних)</p>
-                </div>
-            </div>
-            <div class="footerMenus">
-                <div class="info">
-                    <p class="custom-h4">Інформація</p>
-                    <menu>
-                        <li>
-                            <a href="/uk/about/">Про нас</a>
-                        </li>
-                        <li>
-                            <a href="/uk/about/contacts/">Контакти</a>
-                        </li>
-                        <li>
-                            <a href="/uk/about/faq/">Допомога / FAQ</a>
-                        </li>
-                        <li>
-                            <a href="/uk/about/usloviya/">Умови використання сайту</a>
-                        </li>
-                    </menu>
-                </div>
-            </div>
+        <div class="cheklist">
+            <h3>Your Cart:</h3>
+            <h4>Total: </h4>
         </div>
-    </footer>
+    </div>   
 }
 
 @code
     {
+    [Parameter] public int PageID { get; set; }
     IList<Games> glist;
+    Games gobj = new Games();
     protected override void OnInitialized()
     {
         glist = Service.GetAllGames();
     }
-    [Parameter]
-    public string idpage { get; set; }
+    private void GamesPage(Games gedit)
+    {
+        gobj = gedit;
+    }
 }

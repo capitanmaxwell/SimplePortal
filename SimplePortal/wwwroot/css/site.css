@@ -1,5 +1,35 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 /*#region τ³λόςπ μενώ*/
+@media (min-width: 576px)
+{
+    .modal-dialog {
+        max-width: 90%;
+        margin: 1.75rem auto;
+        max-height: 90%;
+    }
+}
+.modals {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: 1%;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    outline: 0;
+}
+.modals-dialog {
+    position: relative;
+    pointer-events: none;
+}
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: .5rem;
+    pointer-events: none;
+}
 .centerpanel {
     padding: 5px;
     border: 1px solid #333;
@@ -220,6 +250,9 @@ ul {
 /*#endregion*/
 
 /*#region default*/
+.cheklist {
+    background-image: url("cheklist.png");
+}
 .blocklog {
     margin-top: 5%;
     margin-bottom: auto;

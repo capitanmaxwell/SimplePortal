@@ -1,5 +1,6 @@
 ﻿@page "/registration"
 @inject NavigationManager UriHelper
+@inject SimplePortal.Data.GlobalVariable gvar
 
 <link type="text/css" href="/css/login-reg/login-reg.css" rel="stylesheet" />
 
@@ -11,10 +12,10 @@
     <div class="First">
         <p class="toptext">Sign to start your session</p>
         <div class="block1">
-            <input type="text" placeholder="Login" @bind-value="@userlogin" /><br /><br />
-            <input type="text" placeholder="Email" @bind-value="@useremail" /><br /><br />
-            <input type="password" placeholder="Password" @bind-value="@userpassword" /><br /><br />
-            <input type="password" placeholder="Confirm password" @bind-value="@userpassword" /><br /><br />
+            <input type="text" placeholder="Login" @bind-value="@user.Login" /><br /><br />
+            <input type="text" placeholder="Email" @bind-value="@user.Email" /><br /><br />
+            <input type="password" placeholder="Password" @bind-value="@user.Password" /><br /><br />
+            <input type="password" placeholder="Confirm password" @bind-value="@password" /><br /><br />
         </div>
         <div class="block1">
             <input type="button" value="Registration" class="Enter" @onclick="Singup" />
@@ -27,33 +28,15 @@
 </div>
 @code {
     //Variables
-    public string userid;
-    public string userlogin;
-    public string userpassword;
-    public string useremail;
+    Users user = new Users();
+    public string password;
     public string enter = "";
-    private bool authorization = false;
+    IList<Users> ulist;
 
-    /*protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-        await GetTodoItems();
-    }*/
-
-
-    //private async Task GetTodoItems() => todoItems = await Http.GetFromJsonAsync<TodoItem[]>(ServiceEndpoint);
-    /*private async Task GetTodoItems()
-    {
-        try
-        {
-            Reguser = await Http.GetFromJsonAsync<RegisterModel[]>("getdb");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }*/
+        ulist = Service.GetAllUsers();
+    }
     private void Back()
     {
         UriHelper.NavigateTo("/");
@@ -70,30 +53,49 @@
     //function
     private void SearchUser()
     {
-        userlogin = userpassword;
-        /*foreach (var users in Reguser)
+        foreach (var users in ulist)
         {
-            if (userlogin == users.Username)
+            if (user.Password == password)
             {
-                if (userpassword == users.Password)
+                if (user.Login == users.Login)
                 {
-                    authorization = true;
-                    break;
+                    if (user.Password == users.Password)
+                    {
+                        if (user.Email == users.Email)
+                        {
+                            gvar.authorization = true;
+                            break;
+                        }
+                        else
+                        {
+                            enter = "Неправильна пошта.";
+                            gvar.authorization = false;
+                        }
+                    }
+                    else
+                    {
+                        enter = "Неправильний пароль.";
+                        gvar.authorization = false;
+                    }
+                }
+                else
+                {
+                    enter = "Неправильний логін.";
+                    gvar.authorization = false;
                 }
             }
-            else authorization = false;
+            else
+            {
+                enter = "Паролі не співпадають.";
+                gvar.authorization = false;
+            }
         }
 
-        if (authorization == true)
+        if (gvar.authorization == true)
         {
             //you enter
-            UriHelper.NavigateTo("/users/database");
+            UriHelper.NavigateTo("/");
 
         }
-        else if (authorization == false)
-        {
-            //login or password uncorenct
-            enter = "Неправильний логін чи пароль.";
-        }*/
     }
 }

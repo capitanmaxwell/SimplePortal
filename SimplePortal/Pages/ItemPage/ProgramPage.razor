@@ -1,8 +1,8 @@
-﻿@page "/program/{idpage:int}"
+﻿@page "/program/{PageID:int}"
 @inject NavigationManager UriHelper
 @inherits OwningComponentBase<ProjectServices>
+@inject SimplePortal.Data.GlobalVariable gvar
 @using Syncfusion.Blazor.Inputs
-@inject Main.Main id
 
 @if (plist == null)
 {
@@ -10,20 +10,13 @@
 }
 else
 {
-    <div class="centerpanel">
-        @foreach (var program in plist)
-        {
-            if (id.idpage == program.Id)
-            {
-                idpage = id.idpage;
-                <h1>@program.NameP</h1>
-                <tr>@program.DateRelease</tr>
-                <tr>@program.CreatorName</tr>
-                <tr>@program.About</tr>
-                <tr>@program.Price</tr>
-            }
-        }
-    </div>
+<div class="centerpanel">
+            <h1>@pobj.NameP</h1>
+            <tr>@pobj.DateRelease</tr>
+            <tr>@pobj.CreatorName</tr>
+            <tr>@pobj.About</tr>
+            <tr>@pobj.Price</tr>
+</div>
     <footer class="bottombar">
         <div class="footerBlock">
             <div class="footerContacts">
@@ -58,9 +51,9 @@ else
 
 @code
     {
-    [Parameter]
-    public int idpage { get; set; }
+    [Parameter] public int PageID { get; set; }
     IList<Programs> plist;
+    Programs pobj;
     protected override void OnInitialized()
     {
         plist = Service.GetAllPrograms();
