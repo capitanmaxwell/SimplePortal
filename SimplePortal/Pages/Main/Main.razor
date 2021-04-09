@@ -147,9 +147,8 @@ else
             {
                 @foreach (var game in glist)
                 {
-                    idpage = game.Id;
-                    <button class="card" @onclick="@GamesPage">
-                        <div>@game.Id</div>
+                    <button class="card" @onclick="GamesPage">
+                        <div>@(GameID=game.Id)</div>
                         <h3>@game.NameG</h3>
                         <div>@game.About</div>
                         <footer>@game.Price</footer>
@@ -160,8 +159,8 @@ else
             {
                 @foreach (var program in plist)
                 {
-                    idpage = program.Id;
                     <button class="card" @onclick="@ProgramsPage">
+                        <div>@program.Id</div>
                         <h3>@program.NameP</h3>
                         <div>@program.About</div>
                         <footer>@program.Price</footer>
@@ -209,8 +208,7 @@ else
     private int[] PriceValue = { 0, 99999 };
     private int[] YearValue = { 2000, 2021 };
     private string searchvalue;
-    [Parameter]
-    public int idpage { get; set; }
+    [Parameter] public int GameID { get; set; }
     IList<Programs> plist;
     IList<Games> glist;
     IList<Users> ulist;
@@ -232,11 +230,11 @@ else
     }
     private void GamesPage()
     {
-        UriHelper.NavigateTo("/game/" + idpage);
+        UriHelper.NavigateTo("game/{GameID:int}");
     }
     private void ProgramsPage()
     {
-        UriHelper.NavigateTo("/program/" + idpage);
+        UriHelper.NavigateTo("/program");
     }
-    public static implicit operator int(Main id) => id.idpage;
+    //public static implicit operator int(Main id) => id.idpage;
 }

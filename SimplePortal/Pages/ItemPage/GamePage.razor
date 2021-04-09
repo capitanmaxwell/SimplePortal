@@ -1,9 +1,8 @@
-﻿@page "/game/{idpage}"
-@page "/game"
+﻿@page "/game/{GameID:int}"
 @inject NavigationManager UriHelper
 @inherits OwningComponentBase<ProjectServices>
 @using Syncfusion.Blazor.Inputs
-@inject Main.Main id
+@using Main.Main GameID
 
 @if (glist == null)
 {
@@ -14,9 +13,8 @@ else
     <div class="centerpanel">
         @foreach (var game in glist)
         {
-            if (id.idpage == game.Id)
+            if (game.Id == GameID)
             {
-                idpage = id.ToString();
                 <h1>@game.NameG</h1>
                 <tr>@game.DateRelease</tr>
                 <tr>@game.CreatorName</tr>
@@ -66,6 +64,4 @@ else
     {
         glist = Service.GetAllGames();
     }
-    [Parameter]
-    public string idpage { get; set; }
 }

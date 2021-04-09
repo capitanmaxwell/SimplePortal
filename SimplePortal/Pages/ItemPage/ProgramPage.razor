@@ -1,8 +1,8 @@
-﻿@page "/program/{idpage:int}"
+﻿@page "/program/{GameID:int}"
 @inject NavigationManager UriHelper
 @inherits OwningComponentBase<ProjectServices>
 @using Syncfusion.Blazor.Inputs
-@inject Main.Main id
+@inject Main.Main GameID
 
 @if (plist == null)
 {
@@ -13,9 +13,8 @@ else
     <div class="centerpanel">
         @foreach (var program in plist)
         {
-            if (id.idpage == program.Id)
+            if (GameID == program.Id)
             {
-                idpage = id.idpage;
                 <h1>@program.NameP</h1>
                 <tr>@program.DateRelease</tr>
                 <tr>@program.CreatorName</tr>
@@ -58,8 +57,6 @@ else
 
 @code
     {
-    [Parameter]
-    public int idpage { get; set; }
     IList<Programs> plist;
     protected override void OnInitialized()
     {
