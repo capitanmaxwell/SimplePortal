@@ -10,6 +10,7 @@ namespace SimplePortal.Data
     [Table("Games", Schema ="public")]
     public class Games
     {
+        public bool SearchFor;
         [Key]
         public int Id { get; set; }
         public string NameG { get; set; }

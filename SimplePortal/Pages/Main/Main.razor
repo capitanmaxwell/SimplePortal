@@ -18,154 +18,146 @@ else
         </div>
         <div class="centerpanelbtn">
             Search:
-            <input type="text" placeholder="Search" @bind-value="@searchvalue" />
+            <input type="text" placeholder="Search" @bind-value="@searchname" />
         </div>
-        <div class="filter">
-            <!--фільтр ігр-->
-            @if (games == true)
-            {
-                <h3>Ціна</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="text">
-                        <SfSlider Width="(auto)" Value="@PriceValue" Type="SliderType.Range" Min="0" Max="99999" Step="1">
-                            <SliderTooltipData IsVisible="true"
-                                               ShowOn="TooltipShowOn.Always"
-                                               Placement="TooltipPlacement.After">
-                            </SliderTooltipData>
-                        </SfSlider>
-                    </div>
-                </div>
-                <h3>Жанри</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="checkbox" id="genes1">
-                        <label for="genes1">Arcade</label><br />
-                        <input type="checkbox" id="genes2">
-                        <label for="genes2">Action</label><br />
-                        <input type="checkbox" id="genes3">
-                        <label for="genes3">Fighting</label><br />
-                        <input type="checkbox" id="genes4">
-                        <label for="genes4">Race</label><br />
-                        <input type="checkbox" id="genes5">
-                        <label for="genes5">Puzzle</label><br />
-                        <input type="checkbox" id="genes6">
-                        <label for="genes6">Strategies</label>
-                    </div>
-                    <div class="moder">
-                        <input type="checkbox" id="genes7">
-                        <label for="genes7">Horror</label><br />
-                        <input type="checkbox" id="genes8">
-                        <label for="genes8">Adventures</label><br />
-                        <input type="checkbox" id="genes9">
-                        <label for="genes9">RPG</label><br />
-                        <input type="checkbox" id="genes10">
-                        <label for="genes10">Sports</label><br />
-                        <input type="checkbox" id="genes11">
-                        <label for="genes11">Simulator</label><br />
-                        <input type="checkbox" id="genes12">
-                        <label for="genes12">Tabletop</label>
-                    </div>
-                </div>
-                <h3>Роки</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="text">
-                        <SfSlider Width="(auto)" Value="@YearValue" Type="SliderType.Range" Min="2000" Max="2021" Step="1">
-                            <SliderTooltipData IsVisible="true"
-                                               ShowOn="TooltipShowOn.Always"
-                                               Placement="TooltipPlacement.After">
-                            </SliderTooltipData>
-                        </SfSlider>
-                    </div>
-                </div>
-                <h3>Режим гри</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="checkbox" id="mode1">
-                        <label for="mode1">Однокористувацька гра</label><br />
-                        <input type="checkbox" id="mode2">
-                        <label for="mode2">Багатокористувацька гра</label><br />
-                        <input type="checkbox" id="mode3">
-                        <label for="mode3">Кооперативна гра</label><br />
-                        <input type="checkbox" id="mode4">
-                        <label for="mode4">Кросплатформена гра</label><br />
-                    </div>
-                </div>
-                <h3>Операційна система</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="checkbox" id="os1">
-                        <label for="os1">Windows</label><br />
-                        <input type="checkbox" id="os2">
-                        <label for="os2">Linux</label><br />
-                        <input type="checkbox" id="os3">
-                        <label for="os3">Mac</label><br />
-                    </div>
-                </div>
-            }
-            else if (programs == true)
-            {
-                <h3>Ціна</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="text">
-                        <SfSlider Width="(auto)" Value="@PriceValue" Type="SliderType.Range" Min="0" Max="99999" Step="1">
-                            <SliderTooltipData IsVisible="true"
-                                               ShowOn="TooltipShowOn.Always"
-                                               Placement="TooltipPlacement.After">
-                            </SliderTooltipData>
-                        </SfSlider>
-                    </div>
-                </div>
-                <h3>Роки</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="text">
-                        <SfSlider Width="(auto)" Value="@YearValue" Type="SliderType.Range" Min="2000" Max="2021" Step="1">
-                            <SliderTooltipData IsVisible="true"
-                                               ShowOn="TooltipShowOn.Always"
-                                               Placement="TooltipPlacement.After">
-                            </SliderTooltipData>
-                        </SfSlider>
-                    </div>
-                </div>
-                <h3>Операційна система</h3>
-                <div class="mode">
-                    <div class="model">
-                        <input type="checkbox" id="os1">
-                        <label for="os1">Windows</label><br />
-                        <input type="checkbox" id="os2">
-                        <label for="os2">Linux</label><br />
-                        <input type="checkbox" id="os3">
-                        <label for="os3">Mac</label><br />
-                    </div>
-                </div>
-            }
-        </div>
-        <div class="cargo">
-            @if (games == true)
-            {
-                @foreach (var game in glist)
+        <div data-view="grid" style="display: flex; ap: wrap; flex-direction: row; align-content: stretch; align-items: baseline;">
+            <div class="filter">
+                <!--фільтр ігр-->
+                @if (games == true)
                 {
-                    <button class="card" @onclick="(() => GamesPage(game))">
-                        <h3>@game.NameG</h3>
-                        <div>@game.About</div>
-                        <footer>@game.Price</footer>
-                    </button>
+                    <h3>Ціна</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <div style="display: flex;">
+                                <input type="text" style="width:100%" @bind="@pricemin">
+                                <input type="text" style="width:100%" @bind="@pricemax">
+                            </div>
+                            <SfSlider Width="(auto)" Value="@PriceValue" Type="SliderType.Range" Min="0" Max="99999" Step="1">
+                                <SliderTooltipData IsVisible="true"
+                                                   ShowOn="TooltipShowOn.Always"
+                                                   Placement="TooltipPlacement.After">
+                                </SliderTooltipData>
+                            </SfSlider>
+                        </div>
+                    </div>
+                    <h3>Жанри</h3>
+                    <div class="mode">
+                        <div>
+                            <label for="genes1"><input type="checkbox" id="genes1">Arcade</label><br />
+                            <label for="genes2"><input type="checkbox" id="genes2">Action</label><br />
+                            <label for="genes3"><input type="checkbox" id="genes3">Fighting</label><br />
+                            <label for="genes4"><input type="checkbox" id="genes4">Race</label><br />
+                            <label for="genes5"><input type="checkbox" id="genes5">Puzzle</label><br />
+                            <label for="genes6"><input type="checkbox" id="genes6">Strategies</label><br />
+                            <label for="genes7"><input type="checkbox" id="genes7">Horror</label><br />
+                            <label for="genes8"><input type="checkbox" id="genes8">Adventures</label><br />
+                            <label for="genes9"><input type="checkbox" id="genes9">RPG</label><br />
+                            <label for="genes10"><input type="checkbox" id="genes10">Sports</label><br />
+                            <label for="genes11"><input type="checkbox" id="genes11">Simulator</label><br />
+                            <label for="genes12"><input type="checkbox" id="genes12">Tabletop</label>
+                        </div>
+                    </div>
+                    <h3>Роки</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <div style="display: flex;">
+                                <input type="text" style="width:100%" @bind="@yearmin">
+                                <input type="text" style="width:100%" @bind="@yearmax">
+                            </div>
+                            <SfSlider Width="(auto)" Value="@YearValue" Type="SliderType.Range" Min="2000" Max="2021" Step="1">
+                                <SliderTooltipData IsVisible="true"
+                                                   ShowOn="TooltipShowOn.Always"
+                                                   Placement="TooltipPlacement.After">
+                                </SliderTooltipData>
+                            </SfSlider>
+                        </div>
+                    </div>
+                    <h3>Режим гри</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <div>
+                                <label for="mode1"><input type="checkbox" id="mode1">Однокористувацька гра</label><br />
+                                <label for="mode2"><input type="checkbox" id="mode2">Багатокористувацька гра</label><br />
+                                <label for="mode3"><input type="checkbox" id="mode3">Кооперативна гра</label><br />
+                                <label for="mode4"><input type="checkbox" id="mode4">Кросплатформена гра</label><br />
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Операційна система</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <label for="os1"><input type="checkbox" id="os1">Windows</label><br />
+                            <label for="os2"><input type="checkbox" id="os2">Linux</label><br />
+                            <label for="os3"><input type="checkbox" id="os3">Mac</label><br />
+                        </div>
+                    </div>
                 }
-            }
-            else if (programs == true)
-            {
-                @foreach (var program in plist)
+                else if (programs == true)
                 {
-                    <button class="card" @onclick="(()=>ProgramsPage(program))">
-                        <h3>@program.NameP</h3>
-                        <div>@program.About</div>
-                        <footer>@program.Price</footer>
-                    </button>
+                    <h3>Ціна</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <div style="display: flex;">
+                                <input type="text" style="width:100%" @bind="@pricemin">
+                                <input type="text" style="width:100%" @bind="@pricemax">
+                            </div>
+                            <SfSlider Width="(auto)" Value="@PriceValue" Type="SliderType.Range" Min="0" Max="99999" Step="1">
+                                <SliderTooltipData IsVisible="true"
+                                                   ShowOn="TooltipShowOn.Always"
+                                                   Placement="TooltipPlacement.After">
+                                </SliderTooltipData>
+                            </SfSlider>
+                        </div>
+                    </div>
+                    <h3>Роки</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <div style="display: flex;">
+                                <input type="text" style="width:100%" @bind="@yearmin">
+                                <input type="text" style="width:100%" @bind="@yearmax">
+                            </div>
+                            <SfSlider Width="(auto)" Value="@YearValue" Type="SliderType.Range" Min="2000" Max="2021" Step="1">
+                                <SliderTooltipData IsVisible="true"
+                                                   ShowOn="TooltipShowOn.Always"
+                                                   Placement="TooltipPlacement.After">
+                                </SliderTooltipData>
+                            </SfSlider>
+                        </div>
+                    </div>
+                    <h3>Операційна система</h3>
+                    <div class="mode">
+                        <div class="model">
+                            <label for="os1"><input type="checkbox" id="os1">Windows</label><br />
+                            <label for="os2"><input type="checkbox" id="os2">Linux</label><br />
+                            <label for="os3"><input type="checkbox" id="os3">Mac</label><br />
+                        </div>
+                    </div>
                 }
-            }
+            </div>
+            <div class="cargo">
+                @if (games == true)
+                {
+                    @foreach (var game in glist)
+                    {
+                            <button class="card" @onclick="(() => GamesPage(game))">
+                                <h3>@game.NameG</h3>
+                                <div>@game.About</div>
+                                <footer>@game.Price</footer>
+                            </button>
+                    }
+                }
+                else if (programs == true)
+                {
+                    @foreach (var program in plist)
+                    {
+                        <button class="card" @onclick="(()=>ProgramsPage(program))">
+                            <h3>@program.NameP</h3>
+                            <div>@program.About</div>
+                            <footer>@program.Price</footer>
+                        </button>
+                    }
+                }
+            </div>
         </div>
         @if (gpage)
         {
@@ -196,12 +188,31 @@ else
                         <div class="modal-footer">
                             @if (gobj.Price != 0)
                             {
-                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
-                                <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@gobj.Id'">Buy</button>
+                                if (u != null)
+                                {
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
+                                    if (u.Role == 2)
+                                    {
+                                        <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="()=>DeleteGame(gobj)">Delete this game</button>
+                                    }
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@gobj.Id'">Buy</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@gobj.Id'">Buy</button>
+                                }
                             }
                             else
                             {
-                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Add to library</button>
+                                if (u != null)
+                                {
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Add to library</button>
+                                    if (u.Role == 2)
+                                    {
+                                        <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="()=>DeleteGame(gobj)">Delete this game</button>
+                                    }
+                                }
                             }
                             <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Close</button>
                         </div>
@@ -236,12 +247,31 @@ else
                         <div class="modal-footer">
                             @if (pobj.Price != 0)
                             {
-                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
-                                <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@pobj.Id'">Buy</button>
+                                if (u != null)
+                                {
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCartP">Add to cart</button>
+                                    if (u.Role == 2)
+                                    {
+                                        <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="()=>DeleteProgram(pobj)">Delete this game</button>                                      
+                                    }
+                                        <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@pobj.Id'">Buy</button>                                    
+                                }
+                                else
+                                {
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCartP">Add to cart</button>
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@pobj.Id'">Buy</button>
+                                }
                             }
                             else
                             {
-                                <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Add to library</button>
+                                if (u != null)
+                                {
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Add to library</button>
+                                    if (u.Role == 2)
+                                    {
+                                        <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="()=>DeleteProgram(pobj)">Delete this game</button>
+                                    }
+                                }
                             }
                             <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@ClosePage">Close</button>
                         </div>
@@ -251,15 +281,15 @@ else
         }
     </div>
     <footer class="bottombar">
-        <div class="footerBlock">
-            <div class="footerContacts">
+        <table class="footerBlock">
+            <td class="footerContacts">
                 <p class="custom-h4">Контакти</p>
                 <a href="tel:0800210904">life.skull.game@gmail.com</a>
                 <div class="timeTableCallCenter">
                     <p>з 8:00 до 21:00 (без вихідних)</p>
                 </div>
-            </div>
-            <div class="footerMenus">
+            </td>
+            <td class="footerMenus">
                 <div class="info">
                     <p class="custom-h4">Інформація</p>
                     <menu>
@@ -277,8 +307,8 @@ else
                         </li>
                     </menu>
                 </div>
-            </div>
-        </div>
+            </td>
+        </table>
     </footer>
 }
 
@@ -286,9 +316,15 @@ else
     {
     private bool games = true;
     private bool programs = false;
+    #region sorting
     private int[] PriceValue = { 0, 99999 };
     private int[] YearValue = { 2000, 2021 };
-    private string searchvalue;
+    private string searchname;
+    private int pricemin;
+    private int pricemax;
+    private int yearmin;
+    private int yearmax;
+    #endregion
     IList<Programs> plist;
     IList<Games> glist;
     IList<Users> ulist;
@@ -298,7 +334,16 @@ else
     public bool ppage = false;
     string key = "cartlist";
     Games game = new Games();
+    Programs prog = new Programs();
     List<Cart> cart = new List<Cart>();
+    List<Cart> cartp = new List<Cart>();
+    List<Games> gamel;
+    List<Programs> programl;
+    Users u = new Users();
+    protected override async Task OnInitializedAsync()
+    {
+        u = await iLocalStorage.GetItemAsync<Users>("user");
+    }
     protected override void OnInitialized()
     {
         plist = Service.GetAllPrograms();
@@ -322,6 +367,12 @@ else
         gobj = gedit;
         gpage = true;
     }
+    private void DeleteGame(Games deleteg)
+    {
+        Service.DeleteRecG(deleteg);
+        gpage = false;
+        gamel = Service.GetAllGames();
+    }
     private void ClosePage()
     {
         gpage = false;
@@ -332,19 +383,37 @@ else
         pobj = pedit;
         ppage = true;
     }
+    private void DeleteProgram(Programs deletep)
+    {
+        Service.DeleteRecP(deletep);
+        ppage = false;
+        programl = Service.GetAllPrograms();
+    }
     #endregion
     #region cart
     public void AddToCart()
     {
         var cartgame = new Cart();
         cartgame.Name = game.NameG;
-        cartgame.TotalPrice =+ game.Price;
+        cartgame.TotalPrice = +game.Price;
         cart.Add(cartgame);
         SaveCart();
+    }
+    public void AddToCartP()
+    {
+        var cartgame = new Cart();
+        cartgame.Name = prog.NameP;
+        cartgame.TotalPrice = +prog.Price;
+        cart.Add(cartgame);
+        SaveCartp();
     }
     public void SaveCart()
     {
         iLocalStorage.SetItemAsync(key, JsonConvert.SerializeObject(cart));
+    }
+    public void SaveCartp()
+    {
+        iLocalStorage.SetItemAsync("cartlistp", JsonConvert.SerializeObject(cartp));
     }
     #endregion
 }

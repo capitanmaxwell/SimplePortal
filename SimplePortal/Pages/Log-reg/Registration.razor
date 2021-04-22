@@ -49,38 +49,43 @@
     private void Singup()
     {
         //method post(registration) user to DB
+        SearchUser();
+        if (gvar.authorization == true)
+        {
+            SaveUser();
+            user.Id = 0;
+            Service.InsertRecU(user);
+            UriHelper.NavigateTo("/");
+        }
     }
-    //function
+    private async void SaveUser()
+    {
+        await iLocalStorage.SetItemAsync("user", user);
+    }
     private void SearchUser()
     {
         foreach (var users in ulist)
         {
             if (user.Password == password)
             {
-                if (user.Login == users.Login)
+                if (user.Login != users.Login)
                 {
-                    if (user.Password == users.Password)
+                    if (user.Email != users.Email)
                     {
-                        if (user.Email == users.Email)
-                        {
-                            gvar.authorization = true;
-                            break;
-                        }
-                        else
-                        {
-                            enter = "Неправильна пошта.";
-                            gvar.authorization = false;
-                        }
+                        user.Role = 0;
+                        user.Balance = 0;
+                        gvar.authorization = true;
+                        break;
                     }
                     else
                     {
-                        enter = "Неправильний пароль.";
+                        enter = "Така пошта інснує";
                         gvar.authorization = false;
                     }
                 }
                 else
                 {
-                    enter = "Неправильний логін.";
+                    enter = "Такий логін інснує.";
                     gvar.authorization = false;
                 }
             }

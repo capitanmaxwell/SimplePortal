@@ -12,10 +12,10 @@
             <input type="password" placeholder="Password" @bind="user.Password" /><br /><br />
         </div>
         <div class="block1">
-            <input type="button" value="Registration" class="Enter" @onclick="Singup" />
+            <input type="button" value="Registration" class="Enter" onclick="location.href='https://localhost:5001/registration'" />
             <input type="button" value="Sign in" class="Enter" @onclick="SearchUser" />
             <br />
-            <input type="button" value="Back" class="Enter" @onclick="Back" />
+            <input type="button" value="Back" class="Enter" onclick="location.href='https://localhost:5001/'" />
         </div>
     </div>
     <div class="block1">@enter</div>
@@ -28,15 +28,6 @@
     protected override void OnInitialized()
     {
         ulist = Service.GetAllUsers();
-    }
-    private void Back()
-    {
-        UriHelper.NavigateTo("/");
-    }
-    private void Singup()
-    {
-        //Registration page
-        UriHelper.NavigateTo("/registration");
     }
     private async void SaveUser()
     {
@@ -64,7 +55,7 @@
         {
             //you enter
             SaveUser();
-            UriHelper.NavigateTo("/");
+            UriHelper.NavigateTo("/", forceLoad: true);
         }
         else if (gvar.authorization == false)
         {

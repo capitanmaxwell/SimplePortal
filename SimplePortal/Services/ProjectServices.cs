@@ -138,6 +138,8 @@ namespace SimplePortal.Services
                 //Precupdate.DateRelease = pupdate.DateRelease;
                 Precupdate.Password = uupdate.Password;
                 Precupdate.Email = uupdate.Email;
+                Precupdate.Balance = uupdate.Balance;
+                Precupdate.Role = uupdate.Role;
                 _dbcontext.SaveChanges();
             }
             else
