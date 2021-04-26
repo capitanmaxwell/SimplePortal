@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @inject NavigationManager UriHelper
 @inject SimplePortal.Data.GlobalVariable gvar
 @inherits OwningComponentBase<ProjectServices>
@@ -249,7 +249,7 @@ else
                             {
                                 if (u != null)
                                 {
-                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCartP">Add to cart</button>
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
                                     if (u.Role == 2)
                                     {
                                         <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="()=>DeleteProgram(pobj)">Delete this game</button>                                      
@@ -258,7 +258,7 @@ else
                                 }
                                 else
                                 {
-                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCartP">Add to cart</button>
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@AddToCart">Add to cart</button>
                                     <button type="button" class="btnchange" data-bs-dismiss="modal" onclick="location.href='https://localhost:5001/game/@pobj.Id'">Buy</button>
                                 }
                             }
@@ -336,7 +336,6 @@ else
     Games game = new Games();
     Programs prog = new Programs();
     List<Cart> cart = new List<Cart>();
-    List<Cart> cartp = new List<Cart>();
     List<Games> gamel;
     List<Programs> programl;
     Users u = new Users();
@@ -393,27 +392,25 @@ else
     #region cart
     public void AddToCart()
     {
-        var cartgame = new Cart();
-        cartgame.Name = game.NameG;
-        cartgame.TotalPrice = +game.Price;
-        cart.Add(cartgame);
+        if(gpage == true)
+        {
+            var cartgame = new Cart();
+            cartgame.Name = game.NameG;
+            cartgame.TotalPrice = +game.Price;
+            cart.Add(cartgame);
+        }
+        if(ppage == true)
+        {
+            var cartprogram = new Cart();
+            cartprogram.Name = pobj.NameP;
+            cartprogram.TotalPrice = +pobj.Price;
+            cart.Add(cartprogram);
+        }
         SaveCart();
-    }
-    public void AddToCartP()
-    {
-        var cartgame = new Cart();
-        cartgame.Name = prog.NameP;
-        cartgame.TotalPrice = +prog.Price;
-        cart.Add(cartgame);
-        SaveCartp();
     }
     public void SaveCart()
     {
         iLocalStorage.SetItemAsync(key, JsonConvert.SerializeObject(cart));
-    }
-    public void SaveCartp()
-    {
-        iLocalStorage.SetItemAsync("cartlistp", JsonConvert.SerializeObject(cartp));
     }
     #endregion
 }
