@@ -1,87 +1,63 @@
 ﻿@page "/login"
 @inject NavigationManager UriHelper
+@inject SimplePortal.Data.GlobalVariable gvar
 
 <link type="text/css" href="/css/login-reg/login-reg.css" rel="stylesheet" />
 
-@*@if (Reguser == null)
-    {
-        <p><em>Loading...</em></p>
-    }*@
 <div class="form">
     <div class="First">
         <p class="toptext">Sign to start your session</p>
         <div class="block1">
-            <input type="text" placeholder="Login" @bind-value="@userlogin" /><br /><br />
-            <input type="password" placeholder="Password" @bind-value="@userpassword" /><br /><br />
+            <input type="text" placeholder="Login" @bind="user.Login" /><br /><br />
+            <input type="password" placeholder="Password" @bind="user.Password" /><br /><br />
         </div>
         <div class="block1">
-            <input type="button" value="Registration" class="Enter" @onclick="Singup" />
+            <input type="button" value="Registration" class="Enter" onclick="location.href='https://localhost:5001/registration'" />
             <input type="button" value="Sign in" class="Enter" @onclick="SearchUser" />
             <br />
-            <input type="button" value="Back" class="Enter" @onclick="Back" />
+            <input type="button" value="Back" class="Enter" onclick="location.href='https://localhost:5001/'" />
         </div>
     </div>
     <div class="block1">@enter</div>
 </div>
-@code {
-    //Variables
-    public string userlogin;
-    public string userpassword;
+@code { 
     public string enter = "";
-    public bool authorization = false;
     IList<Users> ulist;
-    /*protected override async Task OnInitializedAsync()
-    {
-        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-        await GetTodoItems();
-    }*/
+    Users user = new Users();
 
-
-    //private async Task GetTodoItems() => todoItems = await Http.GetFromJsonAsync<TodoItem[]>(ServiceEndpoint);
-    /*private async Task GetTodoItems()
+    protected override void OnInitialized()
     {
-        try
-        {
-            Reguser = await Http.GetFromJsonAsync<RegisterModel[]>("getdb");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }*/
-    //function
-    private void Back()
-    {
-        UriHelper.NavigateTo("/");
+        ulist = Service.GetAllUsers();
     }
-    private void Singup()
+    private async void SaveUser()
     {
-        //Registration page
-        UriHelper.NavigateTo("/registration");
+        await iLocalStorage.SetItemAsync("user", user);
     }
     private void SearchUser()
     {
         foreach (var users in ulist)
         {
-            if (userlogin == users.Login)
+            if (user.Login == user.Login)
             {
-                if (userpassword == users.Password)
+                if (user.Password == users.Password)
                 {
-                    authorization = true;
+                    user.Role = users.Role;
+                    user.Balance = users.Balance;
+                    user.Email = users.Email;
+                    gvar.authorization = true;
                     break;
                 }
             }
-            else authorization = false;
+            else gvar.authorization = false;
         }
 
-        if (authorization == true)
+        if (gvar.authorization == true)
         {
             //you enter
-            UriHelper.NavigateTo("/");
-
+            SaveUser();
+            UriHelper.NavigateTo("/", forceLoad: true);
         }
-        else if (authorization == false)
+        else if (gvar.authorization == false)
         {
             //login or password uncorenct
             enter = "Неправильний логін чи пароль.";

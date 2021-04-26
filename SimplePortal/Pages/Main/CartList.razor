@@ -1,7 +1,4 @@
-@page "/game/{PageID:int}"
-@inject NavigationManager UriHelper
-@inherits OwningComponentBase<ProjectServices>
-@using Syncfusion.Blazor.Inputs
+﻿@page "/cart"
 @inject SimplePortal.Data.GlobalVariable gvar
 
 <div class="centerpanel">
@@ -9,20 +6,38 @@
     <h3>Your Cart:</h3>
     <table>
         @{ int total = 0; }
-        @for (int i = 0; i < cart.Count; i++)
+        @if (cart != null)
         {
-            var id = i;
-            var cartid = cart[id];
-            <tr>
-                <td><div>@cartid.Name</div></td>
-                <td><div>@cartid.TotalPrice$</div></td>
-                <td><button @onclick="@(()=>RemoveItem(id))">Remove</button></td>
-            </tr>
-            total += cartid.TotalPrice;
+            @for (int i = 0; i < cart.Count; i++)
+            {
+                var id = i;
+                var cartid = cart[id];
+                <tr>
+                    <td><div>@cartid.Name</div></td>
+                    <td><div>@cartid.TotalPrice$</div></td>
+                    <td><button @onclick="@(() => RemoveItem(id))">Remove</button></td>
+                </tr>
+                total += cartid.TotalPrice;
+            }
+        }
+        @{ int total1 = 0; }
+        @if (cart != null)
+        {
+            @for (int i = 0; i < cart.Count; i++)
+            {
+                var id = i;
+                var cartid = cartp[id];
+                <tr>
+                    <td><div>@cartid.Name</div></td>
+                    <td><div>@cartid.TotalPrice$</div></td>
+                    <td><button @onclick="@(() => RemoveItem(id))">Remove</button></td>
+                </tr>
+                total1 += cartid.TotalPrice;
+            }
         }
     </table>
     <br />
-    <h4>Total: @(minusbalance=total)$</h4>
+    <h4>Total: @(minusbalance=total+total1)$</h4>
     <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="Buy">Buy</button>
     <div>@enter</div>
 </div>
@@ -62,16 +77,30 @@
     public string enter = "";
     Cart c = new Cart();
     List<Cart> cart = new List<Cart>();
+    List<Cart> cartp = new List<Cart>();
     Users u = new Users();
     protected override async Task OnInitializedAsync()
     {
         u = await iLocalStorage.GetItemAsync<Users>("user");
-        var storedcart = await iLocalStorage.GetItemAsync<string>("cartlist");
-        var parsedcart = JsonConvert.DeserializeObject<List<Cart>>(storedcart);
-        cart = parsedcart;
-        if (cart == null)
+        if (cart != null)
         {
-            cart = new List<Cart>();
+            var storedcart = await iLocalStorage.GetItemAsync<string>("cartlist");
+            var parsedcart = JsonConvert.DeserializeObject<List<Cart>>(storedcart);
+            cart = parsedcart;
+            if (cart == null)
+            {
+                cart = new List<Cart>();
+            }
+        }
+        if (cartp != null)
+        {
+            var storedcart = await iLocalStorage.GetItemAsync<string>("cartlistp");
+            var parsedcart = JsonConvert.DeserializeObject<List<Cart>>(storedcart);
+            cartp = parsedcart;
+            if (cartp == null)
+            {
+                cartp = new List<Cart>();
+            }
         }
     }
     private void RemoveItem(int index)
@@ -97,7 +126,7 @@
     }
     private async void SaveUser()
     {
-        Service.InsertRecU(u);
+        Service.UpdateRecU(u);
         await iLocalStorage.SetItemAsync("user", u);
     }
 }

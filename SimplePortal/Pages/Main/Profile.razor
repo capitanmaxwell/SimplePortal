@@ -1,0 +1,275 @@
+﻿@page "/profile"
+
+<div class="centerpanel">
+    <div class="centerpanelbtn">
+        <button class="btnchange" @onclick="@Profiles">Profile</button>
+        <button class="btnchange" @onclick="@Library">Library</button>
+        <button class="btnchange" @onclick="@Mygames">My games</button>
+        <button class="btnchange" @onclick="@Myprograms">My programs</button>
+    </div>
+    @if (profile == true)
+    {
+        <h3>Profile</h3>
+
+        <div>Login: @u.Login</div>
+        <div>Email: @u.Email</div>
+        <div>
+            Balance: @u.Balance
+            <button class="btnchange" @onclick="@AddBalance">+Balance</button>
+        </div>
+    }
+    else if (library == true)
+    {
+        <h3>Soon...</h3>
+    }
+    else if (mygames == true)
+    {
+        @if (u.Role != 0)
+        {
+            <h3>My games</h3>
+
+            <button class="btnchange" @onclick="AddGame">Add game</button>
+            <table>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>OS</td>
+                    <td>Price</td>
+                </tr>
+                @foreach (var game in glist)
+                {
+                    @if (game.CreatorName == u.Login)
+                    {
+                        <tr>
+                            <td>@game.Id</td>
+                            <td>@game.NameG</td>
+                            <td>@game.OS</td>
+                            <td>@game.Price</td>
+                            <td><button class="btnchange" @onclick="(() => EditGame(game))">Edit</button></td>
+                            <td><button class="btnchange" @onclick="(() => DeleteGame(game))">Delete</button></td>
+                        </tr>
+                    }
+                }
+            </table>
+            @if (gadd == true)
+            {
+                <div class="modals" tabindex="-1" style="display:block;">
+                    <div class="modals-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Name:<input type="text" @bind-value="@gobj.NameG" /></h2>
+                            </div>
+                            <EditForm Model="gobj" OnValidSubmit="SaveGame">
+                                <div class="modal-body">
+                                    <div class="right-column">
+                                        @{ gobj.CreatorName = u.Login; }
+                                        <div>About:<input type="text" @bind-value="@gobj.About" /></div>
+                                        <div>Genre:<input type="text" @bind-value="@gobj.Genre" /></div>
+                                        <div>Mode:<input type="text" @bind-value="@gobj.Mode" /></div>
+                                        <div>OS:<input type="text" @bind-value="@gobj.OS" /></div>
+                                        <div>Price:<input type="text" @bind-value="@gobj.Price" /></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btnchange" data-bs-dismiss="modal" @onclick="@CloseG">Save game</button>
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@CloseG">Close</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h3>У вас немає прав</h3>
+            <button type="submit" class="btnchange">Відправити запит на отримання прав</button>
+        }
+    }
+    else if (myprograms == true)
+    {
+        @if (u.Role != 0)
+        {
+            <h3>My programs</h3>
+
+            <button class="btnchange" @onclick="@AddProgram">Add program</button>
+            <table>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>OS</td>
+                    <td>Price</td>
+                </tr>
+                <tr>
+                    @foreach (var prog in plist)
+                    {
+                        if (prog.CreatorName == u.Login)
+                        {
+                            <td>@prog.Id</td>
+                            <td>@prog.NameP</td>
+                            <td>@prog.OS</td>
+                            <td>@prog.Price</td>
+                            <td><button class="btnchange" @onclick="(() => EditProgram(prog))">Edit</button></td>
+                            <td><button class="btnchange" @onclick="(() => DeleteProgram(prog))">Delete</button></td>
+                        }
+                    }
+                </tr>
+            </table>
+            @if (padd == true)
+            {
+                <div class="modals" tabindex="-1" style="display:block;">
+                    <div class="modals-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Name:<input type="text" @bind-value="@pobj.NameP" /></h2>
+                            </div>
+                            <EditForm Model="pobj" OnValidSubmit="SaveProgram">
+                                <div class="modal-body">
+                                    <div class="right-column">
+                                        @{ pobj.CreatorName = u.Login; }
+                                        <div>About:<input type="text" @bind-value="@pobj.About" /></div>
+                                        <div>OS:<input type="text" @bind-value="@pobj.OS" /></div>
+                                        <div>Price:<input type="text" @bind-value="@pobj.Price" /></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btnchange" data-bs-dismiss="modal" @onclick="@CloseP">Save game</button>
+                                    <button type="button" class="btnchange" data-bs-dismiss="modal" @onclick="@CloseP">Close</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h3>У вас немає прав</h3>
+            <button type="submit" class="btnchange">Відправити запит на отримання прав</button>
+        }
+    }
+</div>
+
+@code {
+    bool profile = true;
+    bool library = false;
+    bool mygames = false;
+    bool myprograms = false;
+    bool gadd = false;
+    bool padd = false;
+    Users u = new Users();
+    IList<Games> glist;
+    IList<Programs> plist;
+    List<Games> gamel;
+    List<Programs> programl;
+    Games gobj = new Games();
+    Programs pobj = new Programs();
+    protected override async Task OnInitializedAsync()
+    {
+        u = await iLocalStorage.GetItemAsync<Users>("user");
+    }
+    protected override void OnInitialized()
+    {
+        plist = Service.GetAllPrograms();
+        glist = Service.GetAllGames();
+    }
+    private void AddBalance()
+    {
+        if (u != null)
+        {
+            u.Balance += 1000;
+            SaveUser();
+        }
+    }
+    private async void SaveUser()
+    {
+        Service.UpdateRecU(u);
+        await iLocalStorage.SetItemAsync("user", u);
+    }
+    private void SaveGame()
+    {
+        var update = false;
+        if (gobj.Id > 0)
+        {
+            update = Service.UpdateRecG(gobj);
+            gadd = false;
+        }
+        else
+        {
+            gobj.Id = 0;
+            Service.InsertRecG(gobj);
+            gadd = false;
+        }
+        gamel = Service.GetAllGames();
+    }
+    private void AddGame()
+    {
+        gadd = true;
+    }
+    private void AddProgram()
+    {
+        padd = true;
+    }
+    private void EditGame(Games gedit)
+    {
+        gobj = gedit;
+        gadd = true;
+    }
+    private void EditProgram(Programs pedit)
+    {
+        pobj = pedit;
+        gadd = true;
+    }
+    private void SaveProgram()
+    {
+        Service.InsertRecP(pobj);
+        padd = false;
+        programl = Service.GetAllPrograms();
+    }
+    private void DeleteGame(Games deleteg)
+    {
+        Service.DeleteRecG(deleteg);
+        gamel = Service.GetAllGames();
+    }
+    private void DeleteProgram(Programs deletep)
+    {
+        Service.DeleteRecP(deletep);
+        programl = Service.GetAllPrograms();
+    }
+    private void Profiles()
+    {
+        profile = true;
+        library = false;
+        mygames = false;
+        myprograms = false;
+    }
+    private void Library()
+    {
+        profile = false;
+        library = true;
+        mygames = false;
+        myprograms = false;
+    }
+    private void Mygames()
+    {
+        profile = false;
+        library = false;
+        mygames = true;
+        myprograms = false;
+    }
+    private void Myprograms()
+    {
+        profile = false;
+        library = false;
+        mygames = false;
+        myprograms = true;
+    }
+    private void CloseG()
+    {
+        gadd = false;
+    }
+    private void CloseP()
+    {
+        padd = false;
+    }
+}

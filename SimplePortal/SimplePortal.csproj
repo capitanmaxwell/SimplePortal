@@ -6,23 +6,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Main\Profile.razor" />
     <Content Remove="wwwroot\js\Filter.js" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BlazorAnimate" Version="3.0.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
+    <PackageReference Include="Blazored.Toast" Version="3.1.2" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="EntityFramework6.Npgsql" Version="6.4.1" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.4" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
-    <PackageReference Include="Syncfusion.Blazor" Version="19.1.0.54" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.5" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5" />
+    <PackageReference Include="Syncfusion.Blazor" Version="19.1.0.57" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Main\Profile.razor" />
     <None Include="wwwroot\js\Prize.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Main\Profile.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Main\Profile.razor" />
   </ItemGroup>
 
 </Project>

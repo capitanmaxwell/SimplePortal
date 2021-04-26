@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SimplePortal.Services;
 using Syncfusion.Blazor;
-using SimplePortal.Pages.ItemPage;
+using Blazored.LocalStorage;
 
 namespace SimplePortal
 {
@@ -39,6 +39,8 @@ namespace SimplePortal
             services.AddOptions();
             services.AddLocalization();
             services.AddSyncfusionBlazor();
+            services.AddScoped<GlobalVariable>();
+            services.AddBlazoredLocalStorage();
             services.Configure<RouteOptions>(option =>
             {
             }
